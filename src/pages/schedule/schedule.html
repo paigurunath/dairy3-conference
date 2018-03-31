@@ -1,0 +1,210 @@
+<ion-header>
+  <ion-navbar no-border-bottom>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <!-- <ion-segment [(ngModel)]="segment" (ionChange)="updateSchedule()">
+      <ion-segment-button value="all">
+        All
+      </ion-segment-button>
+      <ion-segment-button value="favorites">
+        Favorites
+      </ion-segment-button>
+    </ion-segment> -->
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentFilter()">
+        <ion-icon ios="ios-options-outline" md="md-options"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <ion-toolbar no-border-top>
+    <ion-searchbar color="primary"
+                   [(ngModel)]="queryText"
+                   
+                   placeholder="Search">
+
+                   <!-- (ionInput)="updateSchedule()" -->
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list #scheduleList [hidden]="shownSessions === 0">
+
+    <ion-item-group *ngFor="let group of groups" [hidden]="group.hide">
+
+      <ion-item-divider sticky>
+        <ion-label>
+          {{group.time}}
+        </ion-label>
+      </ion-item-divider>
+
+      <ion-item-sliding *ngFor="let session of group.sessions" #slidingItem [attr.track]="session.tracks[0] | lowercase" [hidden]="session.hide">
+
+        <button ion-item (click)="goToSessionDetail(session)">
+          <h3>{{session.name}}</h3>
+          <p>
+            {{session.timeStart}} &mdash;
+            {{session.timeEnd}}:
+            {{session.location}}
+          </p>
+        </button>
+
+        <!-- <ion-item-options>
+          <button ion-button color="favorite" (click)="addFavorite(slidingItem, session)" *ngIf="segment === 'all'">
+            Favorite
+          </button>
+          <button ion-button color="danger" (click)="removeFavorite(slidingItem, session, 'Remove Favorite')" *ngIf="segment === 'favorites'">
+            Remove
+          </button>
+        </ion-item-options> -->
+
+      </ion-item-sliding>
+      
+      
+       
+    </ion-item-group>
+    
+    <ion-item *ngFor="let c of countries">
+      <ion-avatar item-left>
+        <img src="{{c.flag}}">
+      </ion-avatar>
+      <h2>{{c.name}}</h2>
+      <p>Capital: {{c.capital}}, Region: {{c.region}}</p>
+    </ion-item>
+
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>
+      4 Items in your Wishlist (Swipe for options).
+    </ion-list-header>
+
+    <ion-item-sliding *ngFor="let product of products">
+      <ion-item>
+        <ion-avatar item-left>
+		      <img [src]="product.image">
+		    </ion-avatar>
+		    <h2>{{product.name}}</h2>
+		    <h3>{{product.price | currency}}</h3>
+        <p>{{product.rating}} stars and 420 reviews</p>
+        <button ion-button color="secondary">
+	        <ion-icon name="cart"></ion-icon>
+	        Add Cart
+	      </button>
+      </ion-item>
+      <ion-item-options side="right">
+	      <button ion-button color="danger">
+	        <ion-icon name="trash"></ion-icon>
+	        Remove
+	      </button>
+	      <button ion-button color="secondary">
+	        <ion-icon name="cart"></ion-icon>
+	        Add Cart
+	      </button>
+	    </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-item >
+      <ion-thumbnail item-left>
+          <img src="assets/img/amul_milk/amul7.png"  />
+      </ion-thumbnail>
+        
+      <!-- <span item-start class="dot"></span> -->
+      <!-- <ion-label>Test</ion-label> -->
+      <!-- <div width-50> -->
+          <h2>Amul Gold HOmogenised Standardised Milk</h2>
+          <p></p>
+          <P>MRP. 23.00</P>
+          <!-- <P>MRP. 23.00</P> -->
+        <!-- </div> -->
+        <!-- <div width-50> -->
+          <ion-badge color="default" >Homogenised</ion-badge>
+          <ion-badge color="default" >Standardised</ion-badge>
+          <div>
+              <button  ion-button  item-right color="secondary" >
+                  -
+                  </button>
+                    2
+                  <button  ion-button  item-right color="secondary" >
+                      +
+                      </button>
+          </div>
+           
+          <!-- </div> -->
+      
+    
+    </ion-item>
+    ´
+  </ion-list>
+
+
+  
+  <ion-list-header [hidden]="shownSessions > 0">
+      No Sessions Found
+  </ion-list-header>
+
+  <ion-fab bottom right #fab>
+    <button ion-fab><ion-icon name="share"></ion-icon></button>
+    <ion-fab-list side="top">
+      <button ion-fab color="vimeo" (click)="openSocial('Vimeo', fab)"><ion-icon name="logo-vimeo"></ion-icon></button>
+      <button ion-fab color="google" (click)="openSocial('Google+', fab)"><ion-icon name="logo-googleplus"></ion-icon></button>
+      <button ion-fab color="twitter" (click)="openSocial('Twitter', fab)"><ion-icon name="logo-twitter"></ion-icon></button>
+      <button ion-fab color="facebook" (click)="openSocial('Facebook', fab)"><ion-icon name="logo-facebook"></ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>
+
+
+</ion-content>
+
+<!-- <ion-footer style="background-color: #fff;">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-buttons>
+          <button ion-button full clear >
+              <!-- (click)="addToCart()" 
+             <ion-icon ios="ios-funnel" md="md-funnel"></ion-icon> Add To Cart
+          </button>
+        </ion-buttons>
+      </ion-col>
+      <ion-col>
+        <ion-buttons>
+          <button ion-button full >
+              <!-- (click)="buyNow()" 
+            <ion-icon name="menu"></ion-icon>Buy Now
+          </button>
+        </ion-buttons>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer> -->
+
+<ion-footer>
+  	<ion-grid>
+  		<ion-row>
+  			<ion-col>
+  				<ion-buttons>
+			      <button ion-button full clear (click)="presentFilter()">
+			         <ion-icon ios="ios-funnel" md="md-funnel"></ion-icon>&nbsp;Filter
+			      </button>
+			    </ion-buttons>
+  			</ion-col>
+  			<ion-col>
+  				<ion-buttons>
+			      <button ion-button full clear >
+                <!-- (click)="sortBy()" -->
+			        <ion-icon name="menu"></ion-icon>&nbsp;Sort
+			      </button>
+			    </ion-buttons>
+  			</ion-col>
+  		</ion-row>
+  	</ion-grid>
+</ion-footer>
