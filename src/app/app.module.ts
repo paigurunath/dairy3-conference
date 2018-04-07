@@ -31,6 +31,7 @@ import { ProductsFilterPage } from '../pages/products-filter/products-filter';
 import { ConferenceData } from '../providers/conference-data';
 import { UserData } from '../providers/user-data';
 import { RestProvider } from '../providers/rest/rest';
+import { DairyserviceProvider } from '../providers/dairyservice/dairyservice';
 
 
 @NgModule({
@@ -101,7 +102,8 @@ import { RestProvider } from '../providers/rest/rest';
     UserData,
     InAppBrowser,
     SplashScreen,
-    RestProvider
+    RestProvider,
+    DairyserviceProvider
   ]
 })
 export class AppModule { }
